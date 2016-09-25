@@ -1,20 +1,19 @@
 # 加载所需的程序包----------------------------------------
 
-# library(neuralnet)
-# library(ggplot2)
+stopifnot("package:neuralnet"%in%search()||require("quantmod",quietly=TRUE))
+stopifnot("package:ggplot2"%in%search()||require("tseries",quietly=TRUE))
 
 # 初始化模型记录列表--------------------------------------
 
 # model_index <- 1
-# model_collector <- list()
-# model_table = data.frame("模型序号" = c(1), "隐藏层节点数" = c(1), "召回率" = c(0))
+# model_table <- data.frame("模型序号" = c(1), "隐藏层节点数" = c(1), "召回率" = c(0))
 
 # 载入之前获取的数据--------------------------------------
 
-# data = read.table("/home/jeffmxh/train_data.txt", header = TRUE, sep = "\t")
+# data <- read.table("d://神经网络训练数据//train_data.txt", header = TRUE, sep = "\t")
 # 对数据进行抽样，或许训练集和测试集
-# train_data_1 = sample_n(train_data, 5000, replace = FALSE)
-# train_data_test = sample_n(train_data, 1000, replace = FALSE)
+# train_data_1 <- sample_n(train_data, 5000, replace = FALSE)
+# train_data_test <- sample_n(train_data, 1000, replace = FALSE)
 
 # 主程序，测试模型------------------------------------
 
