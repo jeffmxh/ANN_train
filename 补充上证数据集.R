@@ -1,9 +1,8 @@
-system.time({
-  getSymbols("600476.ss", from = "2014-1-1", to = Sys.time())
-  data_stock = as.data.frame(`600476.SS`)
+  getSymbols("600518.ss", from = "2014-1-1", to = Sys.time())
+  data_stock = as.data.frame(`600518.SS`)
   colnames(data_stock)=c("open","close","low","high","volume","adjusted")
   data_stock = data_stock %>% filter(volume!=0) 
-  rm(`600476.SS`)
+  rm(`600518.SS`)
   for(i in 1:4){
     data_stock[,i] = data_stock[,i]*data_stock[,6]/data_stock[,4]
   }
@@ -24,10 +23,11 @@ system.time({
   }
   train_data_temp = train_data_temp %>% filter(!is.na(judge))
   train_data_temp[,2:51] = round(train_data_temp[,2:51],3)
-  train_data_temp = data.frame("source" = rep("600476",nrow(train_data_temp)),train_data_temp)
+  train_data_temp = data.frame("source" = rep("600518",nrow(train_data_temp)),train_data_temp)
   train_data = rbind(train_data,train_data_temp)
   rm(data_stock)
   rm(train_data_temp)
-  write.table(train_data, "/home/jeffmxh/train_data.txt", col.names = TRUE, row.names = FALSE, sep = "\t")
-})
+  cat("补充数据集600518", "\n", sep = "")
+  # write.table(train_data, "/home/jeffmxh/train_data.txt", col.names = TRUE, row.names = FALSE, sep = "\t")
+
 
