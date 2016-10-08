@@ -1,7 +1,7 @@
 # 加载所需的程序包----------------------------------------
 
-stopifnot("package:neuralnet"%in%search()||require("quantmod",quietly=TRUE))
-stopifnot("package:ggplot2"%in%search()||require("tseries",quietly=TRUE))
+stopifnot("package:neuralnet"%in%search()||require("neuralnet",quietly=TRUE))
+stopifnot("package:ggplot2"%in%search()||require("ggplot2",quietly=TRUE))
 
 # 初始化模型记录列表--------------------------------------
 
@@ -19,7 +19,8 @@ stopifnot("package:ggplot2"%in%search()||require("tseries",quietly=TRUE))
 
 # 求解神经网络模型---------------------
 
-for(i in 31:33){
+for(i in 30:31){
+  cat("开始拟合第", i, "个模型")
   time_temp = Sys.time()
   stock_model <- neuralnet(judge ~ p_1 + p_2 + p_3 + p_4 + p_5 +p_6 + p_7 + p_8 + p_9 + p_10 +
                              p_11 + p_12 + p_13 + p_14 + p_15 + p_16 + p_17 + p_18 + p_19 + p_20 +
@@ -44,15 +45,15 @@ for(i in 31:33){
   
   # 打印记录至日志文件：d:\result.txt ---
   
-  cat("第", i, "个模型拟合完毕", "\n",file = "d://result.txt", append = TRUE, sep = "")
-  cat("隐藏层节点数：" ,i ,"\n",file = "d://result.txt", append = TRUE, sep = "")
-  cat("召回率：", a, "\n",file = "d://result.txt", append = TRUE, sep = "")
-  cat("模型参数", stock_model$result.matrix, "\n", "\n", file = "d://result.txt", append = TRUE, sep = "")
+#   cat("第", i, "个模型拟合完毕", "\n",file = "d://model_new//result.txt", append = TRUE, sep = "")
+#   cat("隐藏层节点数：" ,i ,"\n",file = "d://model_new//result.txt", append = TRUE, sep = "")
+#   cat("召回率：", a, "\n",file = "d://model_new//result.txt", append = TRUE, sep = "")
+#   cat("模型参数", stock_model$result.matrix, "\n", "\n", file = "d://model_new//result.txt", append = TRUE, sep = "")
   # model_collector[[model_index]] = stock_model
   
   # 存储模型至硬盘-----------------------
   
-  file_name = paste0("D://神经网络训练数据//models//model", i, ".RData")
+  file_name = paste0("D://神经网络训练数据//model_new//model", i, ".RData")
   save(stock_model, file = file_name)
   model_table[model_index,] = c(model_index, i, a)
   cat("该模型已被记录，序号为", model_index, "\n", sep = "")
@@ -64,5 +65,5 @@ for(i in 31:33){
 # 绘图观察召回率变化曲线-----------------------------------
 
 p <- ggplot(model_table, aes(x = 隐藏层节点数, y = 召回率))+ geom_line() + ggtitle("神经网络训练结果")
-ggsave(file = "d://result.png", plot = p, width = 30, height = 20, units = "cm")
+ggsave(file = "d://神经网络训练数据//model_new//result.png", plot = p, width = 30, height = 20, units = "cm")
 rm(p)
