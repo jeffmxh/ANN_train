@@ -1,13 +1,22 @@
 normalize <- function(x){
   return((x-min(x))/(max(x)-min(x)))
 }
-library(quantmod)
-library(dplyr)
-getSymbols("600000.ss", from = "2014-1-1", to = Sys.time())
-data_temp = as.data.frame(`600000.SS`)
+symbol_trans <- function(stock_symbol){
+  if(grepl("^60", stock_symbol)){
+    stock_symbol = paste0(stock_symbol, ".ss")
+  }else{
+    stock_symbol = paste0(stock_symbol, ".sz")
+  }
+  return(stock_symbol)
+}
+stopifnot("package:quantmod"%in%search()||require("quantmod",quietly=TRUE))
+stopifnot("package:dplyr"%in%search()||require("dplyr",quietly=TRUE))
+stock_symbol = "300153"
+stock_symbol = symbol_trans(stock_symbol)
+getSymbols(stock_symbol, from = "2014-1-1", to = Sys.time())
+data_temp = as.data.frame(get(toupper(stock_symbol)))
 colnames(data_temp)=c("open","close","low","high","volume","adjusted")
 data_temp = data_temp %>% filter(volume!=0) 
-rm(`600000.SS`)
 for(i in 1:4){
   data_temp[,i] = data_temp[,i]*data_temp[,6]/data_temp[,4]
 }
@@ -28,5 +37,6 @@ for(i in 1:nrow(train_data)){
 }
 train_data = train_data %>% filter(!is.na(judge))
 train_data[,2:51] = round(train_data[,2:51],3)
-train_data = data.frame("source" = rep("600000",nrow(train_data)),train_data) 
-rm(data_temp)
+train_data = data.frame("source" = rep(stock_symbol, nrow(train_data)), train_data) 
+rm(data_temp, stock_symbol, i)
+
