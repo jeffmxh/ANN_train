@@ -1,12 +1,14 @@
 stopifnot("package:quantmod"%in%search()||require("quantmod",quietly=TRUE))
 stopifnot("package:dplyr"%in%search()||require("dplyr",quietly=TRUE))
-stock_symbol = "300001"
+stock_symbol = "300002"
 stock_symbol = symbol_trans(stock_symbol)
 if(stock_symbol %in% train_data$source){
   cat("股票", stock_symbol, "数据已存在于训练集\n", sep = "")
 }else{
-getSymbols(stock_symbol, from = "2014-1-1", to = Sys.time())
-data_stock = as.data.frame(get(toupper(stock_symbol)))
+  env_temp = new.env()
+getSymbols(stock_symbol, from = "2014-1-1", to = Sys.time(), env = env_temp)
+data_stock = as.data.frame(get(toupper(stock_symbol), envir = env_temp))
+rm(env_temp)
 colnames(data_stock)=c("open","close","low","high","volume","adjusted")
 data_stock = data_stock %>% filter(volume!=0) 
 for(i in 1:4){
