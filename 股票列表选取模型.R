@@ -15,11 +15,11 @@ for(i in 501:510){
     },
     error = function(e){
       stock_table[i,3:4] = c(0,0)
-      cat("第", i, "/", nrow(stock_table), "个股票计算失败\n", sep = "")
+      cat("第", i, "/", nrow(stock_table), "个股票计算失败------------\n", sep = "")
     },
     warnings = function(w){
       stock_table[i,3:4] = c(0,0)
-      cat("第", i, "/", nrow(stock_table), "个股票计算失败\n", sep = "")
+      cat("第", i, "/", nrow(stock_table), "个股票计算失败------------\n", sep = "")
     }
   )
 }
