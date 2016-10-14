@@ -5,22 +5,24 @@ stopifnot("package:ggplot2"%in%search()||require("ggplot2",quietly=TRUE))
 
 # 初始化模型记录列表--------------------------------------
 
-# model_index <- 1
-# model_table <- data.frame("模型序号" = c(1), "隐藏层节点数" = c(1), "召回率" = c(0))
+model_index <- 1
+model_table <- data.frame("模型序号" = c(1), "隐藏层节点数" = c(1), "召回率" = c(0))
 
 # 载入之前获取的数据--------------------------------------
 
 # data <- read.table("d://神经网络训练数据//train_data.txt", header = TRUE, sep = "\t")
 # 对数据进行抽样，或许训练集和测试集
-# train_data_1 <- sample_n(train_data, 5000, replace = FALSE)
-# train_data_test <- sample_n(train_data, 1000, replace = FALSE)
+train_data_1 <- sample_n(train_data, 6000, replace = FALSE)
+train_data_test <- sample_n(train_data, 2000, replace = FALSE)
 
 # 主程序，测试模型------------------------------------
 
 # 求解神经网络模型---------------------
 
-for(i in 30:31){
+for(i in 1:5){
   cat("开始拟合第", i, "个模型")
+  tryCatch(
+    {
   time_temp = Sys.time()
   stock_model <- neuralnet(judge ~ p_1 + p_2 + p_3 + p_4 + p_5 +p_6 + p_7 + p_8 + p_9 + p_10 +
                              p_11 + p_12 + p_13 + p_14 + p_15 + p_16 + p_17 + p_18 + p_19 + p_20 +
@@ -60,6 +62,17 @@ for(i in 30:31){
   model_index = model_index + 1
   cat("----------------------", "\n", sep="")
   rm(stock_model, stock_predict, stock_results, a, file_name, time_temp)
+  save(model_table, file = "D://神经网络训练数据//model_new//model_table.RData")
+  },
+  error = function(e){
+    model_table[model_index,] = c(model_index, i, 0)
+    cat("第", i, "个模型拟合失败")
+    },
+  warnings = function(w){
+    model_table[model_index,] = c(model_index, i, 0)
+    cat("第", i, "个模型拟合失败")
+  }
+  )
 }
 
 # 绘图观察召回率变化曲线-----------------------------------
